@@ -1,0 +1,40 @@
+{
+  "name": "@ggpwnkthx/csr-manifest",
+  "description": "Asset manifest types, generation, I/O, and validation for CSR tooling.",
+  "version": "0.0.1-rc.0",
+  "imports": {
+    "@ggpwnkthx/csr-shared": "../shared/src/mod.ts",
+    "@std/assert": "jsr:@std/assert@1.0",
+    "@std/path": "jsr:@std/path@^1.1.4"
+  },
+  "fmt": {
+    "lineWidth": 88,
+    "indentWidth": 2,
+    "useTabs": false,
+    "semiColons": true,
+    "singleQuote": false,
+    "proseWrap": "preserve",
+    "trailingCommas": "onlyMultiLine",
+    "operatorPosition": "nextLine"
+  },
+  "lint": {
+    "rules": {
+      "tags": ["recommended"]
+    }
+  },
+  "compilerOptions": {
+    "strict": true,
+    "lib": ["deno.ns", "dom"]
+  },
+  "exports": {
+    ".": "./src/mod.ts"
+  },
+  "tasks": {
+    "fmt": "deno fmt",
+    "fmt:check": "deno fmt --check",
+    "lint": "deno lint src tests",
+    "check": "deno check src tests",
+    "test": "deno test --allow-read --allow-write --allow-net --allow-env --allow-run tests"
+  },
+  "exclude": [".*", "coverage"]
+}

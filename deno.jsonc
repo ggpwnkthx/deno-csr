@@ -1,0 +1,56 @@
+{
+  "name": "@ggpwnkthx/csr",
+  "description": "A tooling package that wraps `@ggpwnkthx/esbuild` and provides the build/dev workflow that applications use during development and production asset generation.",
+  "version": "0.0.1-rc.0",
+  "workspace": {
+    "members": [
+      "packages/shared",
+      "packages/manifest",
+      "packages/build",
+      "packages/dev"
+    ]
+  },
+  "imports": {
+    "@astral/astral": "jsr:@astral/astral@^0.5",
+    "@ggpwnkthx/esbuild": "jsr:@ggpwnkthx/esbuild@^0.1",
+    "@std/assert": "jsr:@std/assert@^1.0",
+    "@std/path": "jsr:@std/path@^1.1"
+  },
+  "fmt": {
+    "lineWidth": 88,
+    "indentWidth": 2,
+    "useTabs": false,
+    "semiColons": true,
+    "singleQuote": false,
+    "proseWrap": "preserve",
+    "trailingCommas": "onlyMultiLine",
+    "operatorPosition": "nextLine"
+  },
+  "lint": {
+    "rules": {
+      "tags": ["recommended"]
+    }
+  },
+  "compilerOptions": {
+    "strict": true,
+    "lib": ["deno.ns", "dom"]
+  },
+  "exports": {
+    ".": "./src/mod.ts"
+  },
+  "tasks": {
+    "fmt": "deno fmt",
+    "fmt:check": "deno fmt --check",
+    "lint": "deno lint src tests packages",
+    "check": "deno check src tests packages",
+    "build": "deno run --allow-read --allow-write --allow-net packages/build/src/mod.ts",
+    "dev": "deno run --allow-read --allow-write --allow-net packages/dev/src/mod.ts",
+    "test": "deno test --allow-read --allow-write --allow-net --allow-env --allow-run --coverage=coverage",
+    "ci": "deno task fmt:check && deno task lint && deno task check && deno task test"
+  },
+  "lock": {
+    "path": "./deno.lock",
+    "frozen": false
+  },
+  "exclude": [".*", "coverage"]
+}
