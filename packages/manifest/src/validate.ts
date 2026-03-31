@@ -3,16 +3,8 @@
  * @module
  */
 
-import { ASSET_TYPES } from "@ggpwnkthx/csr-shared";
+import { ASSET_TYPES, isPathTraversalSafe } from "@ggpwnkthx/csr-shared";
 import { type ManifestEntry, ManifestError } from "./types.ts";
-
-function isPathTraversalSafe(path: string): boolean {
-  return !(
-    path.startsWith("..")
-    || path.includes("/..")
-    || path.includes("\\..")
-  );
-}
 
 function validateAsset(
   asset: unknown,

@@ -10,13 +10,8 @@ import { buildEntryMap } from "./entry-map.ts";
 import type { EntryMap } from "./entry-map.ts";
 import type { DevClientOptions, DevHandle } from "./types.ts";
 
-export async function devClient(options: {
-  entryPoints: string | string[];
-  outdir?: string;
-  port?: number;
-  esbuildOptions?: Record<string, unknown>;
-}): Promise<DevHandle> {
-  const validated = validateDevOptions(options as DevClientOptions);
+export async function devClient(options: DevClientOptions): Promise<DevHandle> {
+  const validated = validateDevOptions(options);
   const { entryPoints, outdir, port, esbuildOptions } = validated;
 
   let httpServer: Deno.HttpServer | null = null;

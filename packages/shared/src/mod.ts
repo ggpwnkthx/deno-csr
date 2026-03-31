@@ -20,7 +20,7 @@ export {
 
 export { hashFile } from "./hash.ts";
 
-export { normalizePath } from "./normalize.ts";
+export { isPathTraversalSafe, normalizePath } from "./normalize.ts";
 
 export {
   BuildError,
