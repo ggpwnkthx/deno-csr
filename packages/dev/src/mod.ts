@@ -20,6 +20,8 @@
 
 export { DevServerError } from "@ggpwnkthx/csr-shared";
 
+export { FileTooLargeError } from "./errors.ts";
+
 export { devClient } from "./client.ts";
 export { safeFilePath } from "./path-utils.ts";
 export type { DevClientOptions, DevHandle } from "./types.ts";

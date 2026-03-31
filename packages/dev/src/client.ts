@@ -2,13 +2,26 @@ import { context, stop } from "@ggpwnkthx/esbuild";
 import { resolve } from "@std/path";
 import { validateDevOptions } from "@ggpwnkthx/csr-shared";
 import { DevServerError } from "@ggpwnkthx/csr-shared";
-import { MAX_LIVERELOAD_CONTROLLERS } from "./constants.ts";
+import { FileTooLargeError } from "./errors.ts";
+import { MAX_HTML_FILE_SIZE, MAX_LIVERELOAD_CONTROLLERS } from "./constants.ts";
 import { injectLiveReload } from "./live-reload.ts";
 import { getContentType } from "./content-type.ts";
 import { safeFilePath } from "./path-utils.ts";
 import { buildEntryMap } from "./entry-map.ts";
 import type { EntryMap } from "./entry-map.ts";
 import type { DevClientOptions, DevHandle } from "./types.ts";
+
+async function serveHtmlFile(filePath: string, fileSize: number): Promise<Response> {
+  if (fileSize > MAX_HTML_FILE_SIZE) {
+    throw new FileTooLargeError(
+      `HTML file exceeds maximum size of ${MAX_HTML_FILE_SIZE} bytes: ${filePath}`,
+    );
+  }
+  const html = await Deno.readTextFile(filePath);
+  return new Response(injectLiveReload(html), {
+    headers: { "Content-Type": "text/html" },
+  });
+}
 
 export async function devClient(options: DevClientOptions): Promise<DevHandle> {
   const validated = validateDevOptions(options);
@@ -121,10 +134,7 @@ export async function devClient(options: DevClientOptions): Promise<DevHandle> {
           }
           const contentType = getContentType(indexPath);
           if (contentType === "text/html") {
-            const html = await Deno.readTextFile(indexPath);
-            return new Response(injectLiveReload(html), {
-              headers: { "Content-Type": contentType },
-            });
+            return await serveHtmlFile(indexPath, indexStat.size);
           }
           const file = await Deno.open(indexPath, { read: true });
           return new Response(file.readable, {
@@ -133,20 +143,31 @@ export async function devClient(options: DevClientOptions): Promise<DevHandle> {
         }
         const contentType = getContentType(safePath);
         if (contentType === "text/html") {
-          const html = await Deno.readTextFile(safePath);
-          return new Response(injectLiveReload(html), {
-            headers: { "Content-Type": contentType },
-          });
+          return await serveHtmlFile(safePath, stat.size);
         }
         const file = await Deno.open(safePath, { read: true });
         return new Response(file.readable, {
           headers: { "Content-Type": contentType },
         });
       } catch (err) {
+        if (err instanceof FileTooLargeError) {
+          return new Response(err.message, { status: err.statusCode });
+        }
         if (err instanceof Deno.errors.NotFound) {
           return new Response("Not found", { status: 404 });
         }
-        return new Response("Bad Request", { status: 400 });
+        if (
+          err instanceof Deno.errors.PermissionDenied
+          || err instanceof Deno.errors.IsADirectory
+        ) {
+          return new Response("Forbidden", { status: 403 });
+        }
+        const serverError = new DevServerError(
+          `Unexpected request handler error: ${(err as Error).message}`,
+          err,
+        );
+        console.error(`[csr-tooling] ${serverError}`);
+        return new Response("Internal Server Error", { status: 500 });
       }
     });
 
