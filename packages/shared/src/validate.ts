@@ -4,8 +4,7 @@
  */
 
 import { resolve } from "@std/path";
-import type { BuildClientOptions } from "@ggpwnkthx/csr-build";
-import type { DevClientOptions } from "@ggpwnkthx/csr-dev";
+import type { BuildClientOptions, DevClientOptions } from "./options.ts";
 import {
   EntryPointValidationError,
   OutdirValidationError,

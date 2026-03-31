@@ -18,6 +18,8 @@ export {
   validateDevOptions,
 } from "./validate.ts";
 
+export type { BuildClientOptions, DevClientOptions } from "./options.ts";
+
 export { hashFile } from "./hash.ts";
 
 export { isPathTraversalSafe, normalizePath } from "./normalize.ts";

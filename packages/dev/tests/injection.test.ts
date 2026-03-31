@@ -108,3 +108,52 @@ Deno.test({
     await dev.stop();
   },
 });
+
+Deno.test({
+  name: "devClient preserves uppercase </BODY> tag case when injecting",
+  async fn() {
+    await cleanupTestDir();
+
+    const outdir = resolve(TEST_DIR, ".dev-uppercase");
+    await Deno.mkdir(outdir, { recursive: true });
+
+    const entryPath = resolve(TEST_DIR, "client.ts");
+    await Deno.writeTextFile(entryPath, `export const value = 1;`);
+
+    const htmlWithUppercaseBody = `<!DOCTYPE html>
+<html>
+<head><title>Uppercase Body</title></head>
+<BODY>
+<script>console.log("test");</script>
+</BODY>
+</html>`;
+    const htmlPath = resolve(outdir, "uppercase.html");
+    await Deno.writeTextFile(htmlPath, htmlWithUppercaseBody);
+
+    const dev = await devClient({
+      entryPoints: resolve(TEST_DIR, "client.ts"),
+      outdir,
+      port: 19988,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    const response = await fetch(`http://localhost:${dev.port}/uppercase.html`);
+    const html = await response.text();
+    assertEquals(
+      html.includes("</BODY>"),
+      true,
+      "original uppercase closing tag should be preserved",
+    );
+    assertEquals(html.includes("<BODY>"), true, "opening tag should remain");
+    assertEquals(html.includes("__csr_dev_live_reload__"), true);
+    assertEquals(html.includes('<script>console.log("test");</script>'), true);
+    assertEquals(
+      html.indexOf("__csr_dev_live_reload__") < html.indexOf("</BODY>"),
+      true,
+      "script should be injected before closing tag",
+    );
+
+    await dev.stop();
+  },
+});

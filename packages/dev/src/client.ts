@@ -64,21 +64,33 @@ export async function devClient(options: DevClientOptions): Promise<DevHandle> {
             status: 503,
           });
         }
-        let controllerId: number;
+        let controllerId = 0;
+        let controllerRegistered = false;
+        let keepalive: number | undefined;
         const stream = new ReadableStream({
           start(controller) {
             controllerId = nextControllerId++;
             controllers.set(controllerId, controller);
+            controllerRegistered = true;
             request.signal.addEventListener("abort", () => {
-              controllers.delete(controllerId);
+              if (controllerRegistered) {
+                controllers.delete(controllerId);
+                controllerRegistered = false;
+              }
             });
           },
           cancel() {
-            clearInterval(keepalive);
-            controllers.delete(controllerId);
+            if (keepalive !== undefined) {
+              clearInterval(keepalive);
+              keepalive = undefined;
+            }
+            if (controllerRegistered) {
+              controllers.delete(controllerId);
+              controllerRegistered = false;
+            }
           },
         });
-        const keepalive = setInterval(() => {
+        keepalive = setInterval(() => {
           for (const ctrl of controllers.values()) {
             try {
               ctrl.enqueue(`: keepalive\n\n`);
@@ -87,7 +99,6 @@ export async function devClient(options: DevClientOptions): Promise<DevHandle> {
             }
           }
         }, 20_000);
-        request.signal.addEventListener("abort", () => clearInterval(keepalive));
         return new Response(stream, {
           headers: { "Content-Type": "text/event-stream" },
         });

@@ -3,14 +3,7 @@
  * @module
  */
 
-export interface BuildClientOptions {
-  entryPoints: string | string[];
-  outdir?: string;
-  rootDir?: string;
-  esbuildOptions?: Record<string, unknown>;
-  manifest?: boolean;
-  sourcemap?: boolean;
-}
+export type { BuildClientOptions } from "@ggpwnkthx/csr-shared";
 
 export interface BuildResult {
   outputFiles: string[];

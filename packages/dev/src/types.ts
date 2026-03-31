@@ -3,12 +3,7 @@
  * @module
  */
 
-export interface DevClientOptions {
-  entryPoints: string | string[];
-  outdir?: string;
-  port: number;
-  esbuildOptions?: Record<string, unknown>;
-}
+export type { DevClientOptions } from "@ggpwnkthx/csr-shared";
 
 export interface DevHandle {
   hostname: string;
