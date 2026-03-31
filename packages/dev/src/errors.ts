@@ -3,6 +3,9 @@
  * @module
  */
 
+/**
+ * Error thrown when an HTML file exceeds the maximum allowed size.
+ */
 export class FileTooLargeError extends Error {
   readonly statusCode = 413;
 

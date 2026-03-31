@@ -6,6 +6,9 @@
 
 import { createHash } from "node:crypto";
 
+/**
+ * Computes the SHA-256 hash of a file.
+ */
 export async function hashFile(filePath: string): Promise<string> {
   const file = await Deno.open(filePath, { read: true });
   const hash = createHash("sha256");

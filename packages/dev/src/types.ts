@@ -5,6 +5,9 @@
 
 export type { DevClientOptions } from "@ggpwnkthx/csr-shared";
 
+/**
+ * Handle to the running dev server.
+ */
 export interface DevHandle {
   hostname: string;
   port: number;

@@ -7,6 +7,12 @@ import { relative, resolve } from "@std/path";
 import { type ManifestEntry, ManifestError } from "./types.ts";
 import { detectAssetType, hashFile, normalizePath } from "@ggpwnkthx/csr-shared";
 
+/**
+ * Generates a manifest entry for a build output file.
+ * @param originalPath - The original entry point path (relative)
+ * @param absOutputFile - The absolute path to the build output
+ * @param outdir - The output directory
+ */
 export async function generateManifestEntry(
   originalPath: string,
   absOutputFile: string,

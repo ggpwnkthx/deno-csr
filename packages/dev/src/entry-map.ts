@@ -2,11 +2,17 @@ import { basename, extname } from "@std/path";
 
 const VALID_ENTRY_EXTS = [".js", ".mjs", ".ts", ".tsx", ".jsx"] as const;
 
+/**
+ * Maps entry names to their output files.
+ */
 export interface EntryMap {
   js: string;
   css?: string;
 }
 
+/**
+ * Builds an entry map from esbuild metafile outputs.
+ */
 export function buildEntryMap(
   metafile: {
     outputs: Record<

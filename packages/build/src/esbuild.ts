@@ -17,12 +17,21 @@ let esbuildModule: EsbuildModule = {
   stop,
 };
 
+/**
+ * Sets the esbuild module instance for testing.
+ */
 export function setEsbuildModule(module: EsbuildModule): void {
   esbuildModule = module;
 }
 
+/**
+ * Resets the esbuild module to the default implementation.
+ */
 export function resetEsbuildModule(): void {
   esbuildModule = { build, formatMessages, stop };
 }
 
+/**
+ * The current esbuild module instance.
+ */
 export { esbuildModule };

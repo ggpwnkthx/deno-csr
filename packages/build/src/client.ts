@@ -10,6 +10,9 @@ import { generateBuildManifest } from "./manifest.ts";
 import { BuildError, validateBuildOptions } from "@ggpwnkthx/csr-shared";
 import type { BuildClientOptions, BuildResult } from "./types.ts";
 
+/**
+ * Runs a production client build.
+ */
 export async function buildClient(
   options: BuildClientOptions,
 ): Promise<BuildResult> {

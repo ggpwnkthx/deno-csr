@@ -2,6 +2,9 @@ import { LIVE_RELOAD_MARKER, LIVE_RELOAD_SCRIPT } from "./constants.ts";
 
 const BODY_REGEX = /<\/body>/i;
 
+/**
+ * Injects the live reload script into HTML.
+ */
 export function injectLiveReload(html: string): string {
   if (html.toLowerCase().includes(LIVE_RELOAD_MARKER)) {
     return html;

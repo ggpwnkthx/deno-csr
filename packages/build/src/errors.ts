@@ -18,6 +18,9 @@ interface EsbuildError {
 
 import type { BuildDiagnostic } from "./types.ts";
 
+/**
+ * Converts esbuild errors to structured build diagnostics.
+ */
 export function buildErrorsToStructured(
   errors: unknown[],
 ): BuildDiagnostic[] {

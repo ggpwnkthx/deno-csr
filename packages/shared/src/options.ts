@@ -3,6 +3,9 @@
  * @module
  */
 
+/**
+ * Options for the production build client.
+ */
 export interface BuildClientOptions {
   entryPoints: string | string[];
   outdir?: string;
@@ -12,6 +15,9 @@ export interface BuildClientOptions {
   sourcemap?: boolean;
 }
 
+/**
+ * Options for the development server client.
+ */
 export interface DevClientOptions {
   entryPoints: string | string[];
   outdir?: string;

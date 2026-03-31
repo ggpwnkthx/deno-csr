@@ -3,6 +3,9 @@
  * @module
  */
 
+/**
+ * Error thrown when a production build fails.
+ */
 export class BuildError extends Error {
   constructor(message: string, cause?: unknown) {
     super(message, { cause });
@@ -10,6 +13,9 @@ export class BuildError extends Error {
   }
 }
 
+/**
+ * Error thrown when the development server encounters an error.
+ */
 export class DevServerError extends Error {
   constructor(message: string, cause?: unknown) {
     super(message, { cause });
@@ -17,6 +23,9 @@ export class DevServerError extends Error {
   }
 }
 
+/**
+ * Error thrown when option validation fails.
+ */
 export class ValidationError extends Error {
   constructor(message: string, cause?: unknown) {
     super(message, { cause });
@@ -24,6 +33,9 @@ export class ValidationError extends Error {
   }
 }
 
+/**
+ * Error thrown when entry point validation fails.
+ */
 export class EntryPointValidationError extends ValidationError {
   constructor(message: string, cause?: unknown) {
     super(message, { cause });
@@ -31,6 +43,9 @@ export class EntryPointValidationError extends ValidationError {
   }
 }
 
+/**
+ * Error thrown when outdir validation fails.
+ */
 export class OutdirValidationError extends ValidationError {
   constructor(message: string, cause?: unknown) {
     super(message, { cause });
@@ -38,6 +53,9 @@ export class OutdirValidationError extends ValidationError {
   }
 }
 
+/**
+ * Error thrown when port validation fails.
+ */
 export class PortValidationError extends ValidationError {
   constructor(message: string, cause?: unknown) {
     super(message, { cause });

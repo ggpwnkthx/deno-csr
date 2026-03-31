@@ -11,6 +11,12 @@ import {
   type ValidateManifestOptions,
 } from "./types.ts";
 
+/**
+ * Builds a complete manifest from entries.
+ * @param entries - Map of entry names to manifest entries
+ * @param options - Optional manifest options
+ * @param assets - Optional array of unkeyed assets
+ */
 export function buildManifest(
   entries: Record<string, ManifestEntry>,
   options?: ValidateManifestOptions,

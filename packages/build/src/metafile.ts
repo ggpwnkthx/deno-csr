@@ -7,13 +7,19 @@ import { relative, resolve } from "@std/path";
 import { type ManifestEntry, type UnkeyedOutputEntry } from "@ggpwnkthx/csr-manifest";
 import { detectAssetType, hashFile, normalizePath } from "@ggpwnkthx/csr-shared";
 
+/**
+ * An entry in the esbuild metafile outputs.
+ */
 export interface MetafileOutputEntry {
   entryPoint?: string;
   bytes: number;
   inputs?: Record<string, { bytesInOutput: number }>;
-  kind?: string;
+  kind?: "chunk" | "asset";
 }
 
+/**
+ * Type guard for MetafileOutputEntry.
+ */
 export function isMetafileOutputEntry(
   value: unknown,
 ): value is MetafileOutputEntry {
@@ -29,7 +35,7 @@ export function isMetafileOutputEntry(
   if (entry.inputs !== undefined) {
     if (typeof entry.inputs !== "object") return false;
   }
-  if (entry.kind !== undefined && typeof entry.kind !== "string") {
+  if (entry.kind !== undefined && !["chunk", "asset"].includes(entry.kind as string)) {
     return false;
   }
   return true;
@@ -39,12 +45,18 @@ interface MetafileOutput {
   [key: string]: MetafileOutputEntry | undefined;
 }
 
+/**
+ * Options for processing esbuild metafile outputs.
+ */
 interface ProcessMetafileOptions {
   metafile: MetafileOutput;
   outdir: string;
   rootDir: string;
 }
 
+/**
+ * Result of processing esbuild metafile outputs.
+ */
 interface ProcessedMetafileResult {
   keyedEntries: Record<string, ManifestEntry>;
   unkeyedAssets: UnkeyedOutputEntry[];
@@ -104,6 +116,9 @@ async function processSingleOutput(
   };
 }
 
+/**
+ * Processes esbuild metafile outputs into manifest entries.
+ */
 export async function processMetafileOutputs(
   options: ProcessMetafileOptions,
 ): Promise<ProcessedMetafileResult> {

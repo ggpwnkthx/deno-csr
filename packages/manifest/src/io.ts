@@ -14,10 +14,18 @@ import { validateAssets, validateManifestEntry } from "./validate.ts";
 
 const MANIFEST_FILENAME = "manifest.json";
 
+/**
+ * Resolves the manifest file path for a given output directory.
+ */
 export function resolveManifestPath(outdir: string): string {
   return resolve(outdir, MANIFEST_FILENAME);
 }
 
+/**
+ * Writes a manifest to the output directory.
+ * @param manifest - The manifest to write
+ * @param outdir - The output directory
+ */
 export async function writeManifest(
   manifest: AssetManifest,
   outdir: string,
@@ -28,6 +36,11 @@ export async function writeManifest(
   return manifestPath;
 }
 
+/**
+ * Reads and validates a manifest from disk.
+ * @param manifestPath - Path to the manifest file
+ * @param options - Optional validation options
+ */
 export async function readManifest(
   manifestPath: string,
   options?: ValidateManifestOptions,

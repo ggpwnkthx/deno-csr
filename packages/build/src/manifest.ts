@@ -10,6 +10,9 @@ import {
   writeManifest,
 } from "@ggpwnkthx/csr-manifest";
 
+/**
+ * Options for generating the build manifest.
+ */
 interface GenerateManifestOptions {
   keyedEntries: Record<string, ManifestEntry>;
   unkeyedAssets: UnkeyedOutputEntry[];
@@ -17,11 +20,17 @@ interface GenerateManifestOptions {
   generateManifest: boolean;
 }
 
+/**
+ * Result of generating the build manifest.
+ */
 interface ManifestResult {
   manifestPath: string | null;
   outputFiles: string[];
 }
 
+/**
+ * Generates and writes the build manifest.
+ */
 export async function generateBuildManifest(
   options: GenerateManifestOptions,
 ): Promise<ManifestResult> {

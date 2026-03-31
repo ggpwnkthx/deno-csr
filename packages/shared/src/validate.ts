@@ -31,6 +31,9 @@ const OWNED_ESBUILD_FIELDS = [
   "plugins",
 ] as const;
 
+/**
+ * Validated options for the production build client.
+ */
 export interface ValidatedBuildOptions {
   entryPoints: string[];
   outdir: string;
@@ -40,6 +43,9 @@ export interface ValidatedBuildOptions {
   sourcemap: boolean;
 }
 
+/**
+ * Validated options for the development server client.
+ */
 export interface ValidatedDevOptions {
   entryPoints: string[];
   outdir: string;
@@ -145,6 +151,9 @@ function sanitizeEsbuildOptions(
   return sanitized;
 }
 
+/**
+ * Validates and normalizes build client options.
+ */
 export function validateBuildOptions(
   options: BuildClientOptions,
 ): ValidatedBuildOptions {
@@ -158,6 +167,9 @@ export function validateBuildOptions(
   };
 }
 
+/**
+ * Validates and normalizes dev client options.
+ */
 export function validateDevOptions(
   options: DevClientOptions,
 ): ValidatedDevOptions {

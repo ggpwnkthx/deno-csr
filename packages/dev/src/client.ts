@@ -3,7 +3,11 @@ import { resolve } from "@std/path";
 import { validateDevOptions } from "@ggpwnkthx/csr-shared";
 import { DevServerError } from "@ggpwnkthx/csr-shared";
 import { FileTooLargeError } from "./errors.ts";
-import { MAX_HTML_FILE_SIZE, MAX_LIVERELOAD_CONTROLLERS } from "./constants.ts";
+import {
+  LIVE_RELOAD_SCRIPT,
+  MAX_HTML_FILE_SIZE,
+  MAX_LIVERELOAD_CONTROLLERS,
+} from "./constants.ts";
 import { injectLiveReload } from "./live-reload.ts";
 import { getContentType } from "./content-type.ts";
 import { safeFilePath } from "./path-utils.ts";
@@ -17,12 +21,52 @@ async function serveHtmlFile(filePath: string, fileSize: number): Promise<Respon
       `HTML file exceeds maximum size of ${MAX_HTML_FILE_SIZE} bytes: ${filePath}`,
     );
   }
-  const html = await Deno.readTextFile(filePath);
-  return new Response(injectLiveReload(html), {
+  const file = await Deno.open(filePath, { read: true });
+  const reader = file.readable.getReader();
+  const decoder = new TextDecoder();
+  const encoder = new TextEncoder();
+  let buffer = "";
+  let injected = false;
+
+  const transformed = new ReadableStream({
+    async pull(controller) {
+      const { done, value } = await reader.read();
+      if (done) {
+        if (!injected) {
+          controller.enqueue(encoder.encode(injectLiveReload(buffer)));
+        }
+        controller.close();
+        file.close();
+        return;
+      }
+      buffer += decoder.decode(value, { stream: true });
+      if (!injected) {
+        const bodyIdx = buffer.toLowerCase().indexOf("</body>");
+        if (bodyIdx !== -1) {
+          const beforeBody = buffer.slice(0, bodyIdx);
+          const afterBody = buffer.slice(bodyIdx);
+          controller.enqueue(encoder.encode(beforeBody));
+          controller.enqueue(encoder.encode(LIVE_RELOAD_SCRIPT));
+          controller.enqueue(encoder.encode(afterBody));
+          injected = true;
+          buffer = "";
+        }
+      }
+    },
+    cancel() {
+      reader.cancel();
+      file.close();
+    },
+  });
+
+  return new Response(transformed, {
     headers: { "Content-Type": "text/html" },
   });
 }
 
+/**
+ * Starts the development server with live reload.
+ */
 export async function devClient(options: DevClientOptions): Promise<DevHandle> {
   const validated = validateDevOptions(options);
   const { entryPoints, outdir, port, esbuildOptions } = validated;
