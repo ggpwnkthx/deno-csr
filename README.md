@@ -91,6 +91,25 @@ for (const [entryName, entry] of Object.entries(manifest.entries)) {
 
 Performs a production client build.
 
+**Esbuild Module Management:**
+
+```typescript
+import {
+  esbuildModule,
+  resetEsbuildModule,
+  setEsbuildModule,
+} from "jsr:@ggpwnkthx/csr@^0.1";
+
+// Get the current esbuild module instance
+const esbuild = esbuildModule;
+
+// Replace with a custom esbuild implementation
+setEsbuildModule(customEsbuildModule);
+
+// Reset to the default esbuild module
+resetEsbuildModule();
+```
+
 Production builds use the following managed settings (cannot be overridden via `esbuildOptions`):
 
 - `platform: "browser"` - Browser-oriented output
@@ -173,6 +192,17 @@ interface DevHandle {
   /** Stops the dev server and cleans up watchers */
   stop: () => Promise<void>;
 }
+```
+
+### `safeFilePath(path, outdir)`
+
+Validates that a file path is safe and within the output directory. Returns the resolved absolute path if safe, or `null` if the path would traverse outside the output directory.
+
+```typescript
+import { safeFilePath } from "jsr:@ggpwnkthx/csr@^0.1";
+
+const safePath = safeFilePath("/foo/bar.js", ".dev");
+// Returns absolute path if valid, null if path traversal detected
 ```
 
 ### Manifest Schema
@@ -262,6 +292,7 @@ try {
 | `EntryPointValidationError` | Entry point file does not exist        |
 | `OutdirValidationError`     | outdir is empty or invalid             |
 | `PortValidationError`       | Port is not an integer between 1-65535 |
+| `FileTooLargeError`         | HTML file exceeds maximum size         |
 
 ## Architecture
 

@@ -9,11 +9,8 @@
     "jsr:@ggpwnkthx/esbuild@0.1": "0.1.5",
     "jsr:@ggpwnkthx/esbuild@0.1.5": "0.1.5",
     "jsr:@std/assert@1": "1.0.19",
-    "jsr:@std/assert@1.0": "1.0.19",
     "jsr:@std/async@1": "1.2.0",
     "jsr:@std/bytes@^1.0.2": "1.0.6",
-    "jsr:@std/crypto@1": "1.0.5",
-    "jsr:@std/crypto@1.0.5": "1.0.5",
     "jsr:@std/encoding@1": "1.0.10",
     "jsr:@std/fmt@1.0.3": "1.0.3",
     "jsr:@std/fmt@^1.0.3": "1.0.3",
@@ -26,7 +23,6 @@
     "jsr:@std/path@1": "1.1.4",
     "jsr:@std/path@^1.0.8": "1.1.4",
     "jsr:@std/path@^1.1.0": "1.1.4",
-    "jsr:@std/path@^1.1.4": "1.1.4",
     "jsr:@zip-js/zip-js@^2.7.52": "2.8.24"
   },
   "jsr": {
@@ -84,9 +80,6 @@
     "@std/bytes@1.0.6": {
       "integrity": "f6ac6adbd8ccd99314045f5703e23af0a68d7f7e58364b47d2c7f408aeb5820a"
     },
-    "@std/crypto@1.0.5": {
-      "integrity": "0dcfbb319fe0bba1bd3af904ceb4f948cde1b92979ec1614528380ed308a3b40"
-    },
     "@std/encoding@1.0.10": {
       "integrity": "8783c6384a2d13abd5e9e87a7ae0520a30e9f56aeeaa3bdf910a3eaaf5c811a1"
     },
@@ -141,13 +134,13 @@
       },
       "packages/manifest": {
         "dependencies": [
-          "jsr:@std/assert@1.0",
-          "jsr:@std/path@^1.1.4"
+          "jsr:@std/assert@1",
+          "jsr:@std/path@^1.1.0"
         ]
       },
       "packages/shared": {
         "dependencies": [
-          "jsr:@ggpwnkthx/esbuild@0.1.5",
+          "jsr:@ggpwnkthx/esbuild@0.1",
           "jsr:@std/path@1"
         ]
       }

@@ -25,14 +25,14 @@ deno task dev        # Run development server
 ### Single Test Execution
 
 ```bash
-# Run a specific test file
+# Run a specific test file with all permissions
 deno test -A ./tests/dev-server.test.ts
 
 # Run a specific test by name (uses regex)
 deno test -A --filter "dev server" ./tests/
 
-# Run with coverage
-deno test -A --coverage=coverage ./tests/*
+# Run with coverage (same permissions as `deno task test`)
+deno test --allow-read --allow-write --allow-net --allow-env --allow-run --coverage=coverage ./tests/*
 ```
 
 ### Permissions
@@ -63,6 +63,7 @@ Required permissions for tasks:
   - `@std/assert@^1.0` for testing assertions
   - `@std/path@^1.1` for path utilities
   - `@ggpwnkthx/esbuild@^0.1` for esbuild wrapper
+  - `@astral/astral@^0.5` for AST utilities
 - Sort imports: external → internal → relative
 
 ### Formatting (from deno.jsonc)
@@ -225,3 +226,9 @@ deno check ./src/mod.ts
 # Format and lint
 deno fmt && deno lint
 ```
+
+## Lock File
+
+- `deno.lock` is tracked in git (not frozen)
+- Run `deno task fmt` after adding new dependencies to update lock file
+- Do not edit `deno.lock` manually

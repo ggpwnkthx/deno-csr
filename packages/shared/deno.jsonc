@@ -5,7 +5,7 @@
   "imports": {
     "@ggpwnkthx/csr": "../../src/mod.ts",
     "@std/path": "jsr:@std/path@^1.0",
-    "@ggpwnkthx/esbuild": "jsr:@ggpwnkthx/esbuild@0.1.5"
+    "@ggpwnkthx/esbuild": "jsr:@ggpwnkthx/esbuild@^0.1"
   },
   "fmt": {
     "lineWidth": 88,
