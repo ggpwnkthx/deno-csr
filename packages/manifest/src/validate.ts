@@ -3,15 +3,29 @@
  * @module
  */
 
-import { ASSET_TYPES, isPathTraversalSafe } from "@ggpwnkthx/csr-shared";
+import { ASSET_TYPES } from "@ggpwnkthx/csr-shared";
 import { type ManifestEntry, ManifestError } from "./types.ts";
+import { containsPathTraversal, isAbsolutePath } from "./path-utils.ts";
 
-function isAbsolutePath(path: string): boolean {
-  return path.startsWith("/") || path.includes("\\") || /^[a-z]:/i.test(path);
-}
-
-function isPathSafe(path: string): boolean {
-  return isPathTraversalSafe(path) && !isAbsolutePath(path);
+function validateOutputFile(
+  path: string,
+  fieldLabel: string,
+): void {
+  if (isAbsolutePath(path)) {
+    throw new ManifestError(
+      `${fieldLabel} must be relative to outdir.`,
+    );
+  }
+  if (containsPathTraversal(path)) {
+    throw new ManifestError(
+      `${fieldLabel} must not escape outdir.`,
+    );
+  }
+  if (path.includes("\\")) {
+    throw new ManifestError(
+      `${fieldLabel} must use forward slashes.`,
+    );
+  }
 }
 
 function validateAsset(
@@ -55,11 +69,10 @@ function validateAsset(
       `Manifest asset at index ${index} has invalid kind: must be "chunk" or "asset".`,
     );
   }
-  if (!isPathSafe(a.outputFile)) {
-    throw new ManifestError(
-      `Manifest asset at index ${index} has invalid outputFile: must be relative and safe from traversal.`,
-    );
-  }
+  validateOutputFile(
+    a.outputFile as string,
+    `Manifest asset at index ${index} has invalid outputFile`,
+  );
 }
 
 /**
@@ -114,15 +127,26 @@ export function validateManifestEntry(
     );
   }
 
-  if (!isPathSafe(e.outputFile)) {
+  validateOutputFile(
+    e.outputFile as string,
+    `Manifest entry "${key}" has invalid outputFile`,
+  );
+
+  if (isAbsolutePath(e.originalPath as string)) {
     throw new ManifestError(
-      `Manifest entry "${key}" has invalid outputFile: must be relative and safe from traversal.`,
+      `Manifest entry "${key}" has invalid originalPath: must be relative to outdir.`,
     );
   }
 
-  if (!isPathSafe(e.originalPath)) {
+  if (containsPathTraversal(e.originalPath as string)) {
     throw new ManifestError(
-      `Manifest entry "${key}" has invalid originalPath: must be relative and safe from traversal.`,
+      `Manifest entry "${key}" has invalid originalPath: must not escape project root.`,
+    );
+  }
+
+  if ((e.originalPath as string).includes("\\")) {
+    throw new ManifestError(
+      `Manifest entry "${key}" has invalid originalPath: must use forward slashes.`,
     );
   }
 

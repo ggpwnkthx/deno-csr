@@ -6,6 +6,7 @@
 import { relative, resolve } from "@std/path";
 import { type ManifestEntry, ManifestError } from "./types.ts";
 import { detectAssetType, hashFile, normalizePath } from "@ggpwnkthx/csr-shared";
+import { containsPathTraversal, isAbsolutePath } from "./path-utils.ts";
 
 /**
  * Generates a manifest entry for a build output file.
@@ -18,20 +19,12 @@ export async function generateManifestEntry(
   absOutputFile: string,
   outdir: string,
 ): Promise<ManifestEntry> {
-  if (
-    originalPath.startsWith("/")
-    || originalPath.includes("\\")
-    || /^[a-z]:/i.test(originalPath)
-  ) {
+  if (isAbsolutePath(originalPath)) {
     throw new ManifestError(
       "originalPath must be relative to project root, not absolute.",
     );
   }
-  if (
-    originalPath.startsWith("..")
-    || originalPath.includes("/..")
-    || originalPath.includes("\\..")
-  ) {
+  if (originalPath.startsWith("..") || containsPathTraversal(originalPath)) {
     throw new ManifestError(
       'originalPath must not escape project root via ".." traversal.',
     );

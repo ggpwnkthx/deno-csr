@@ -38,6 +38,45 @@ Deno.test({
 });
 
 Deno.test({
+  name: "readManifest rejects asset with path traversal in outputFile",
+  async fn() {
+    await cleanupTestDir();
+
+    const invalidManifest = {
+      version: 1,
+      timestamp: new Date().toISOString(),
+      entries: {
+        "client.ts": {
+          originalPath: "client.ts",
+          outputFile: "client.js",
+          size: 100,
+          hash: "a".repeat(64),
+          type: "js",
+        },
+      },
+      assets: [{
+        outputFile: "chunk/../chunk.js",
+        size: 100,
+        hash: "a".repeat(64),
+        type: "js",
+        kind: "chunk",
+      }],
+    };
+
+    const manifestPath = resolve(TEST_DIR, "invalid-manifest.json");
+    await Deno.writeTextFile(manifestPath, JSON.stringify(invalidManifest));
+
+    await assertRejects(
+      async () => {
+        await readManifest(manifestPath);
+      },
+      ManifestError,
+      "must not escape outdir",
+    );
+  },
+});
+
+Deno.test({
   name: "readManifest throws ManifestError for invalid version",
   async fn() {
     await cleanupTestDir();
@@ -279,7 +318,7 @@ Deno.test({
         await readManifest(manifestPath);
       },
       ManifestError,
-      "must be relative to outdir",
+      "must use forward slashes",
     );
   },
 });
@@ -364,6 +403,73 @@ Deno.test({
       },
       ManifestError,
       "must not escape outdir",
+    );
+  },
+});
+
+Deno.test({
+  name: "readManifest rejects entry with backslash in originalPath",
+  async fn() {
+    await cleanupTestDir();
+
+    const entries: Record<string, ManifestEntry> = {
+      "client.ts": {
+        originalPath: "foo\\bar\\client.ts",
+        outputFile: "client.js",
+        size: 100,
+        hash: "a".repeat(64),
+        type: "js",
+      },
+    };
+
+    const manifest = buildManifest(entries);
+    const manifestPath = await writeManifest(manifest, TEST_DIR);
+
+    await assertRejects(
+      async () => {
+        await readManifest(manifestPath);
+      },
+      ManifestError,
+      "must use forward slashes",
+    );
+  },
+});
+
+Deno.test({
+  name: "readManifest rejects asset with backslash in outputFile",
+  async fn() {
+    await cleanupTestDir();
+
+    const invalidManifest = {
+      version: 1,
+      timestamp: new Date().toISOString(),
+      entries: {
+        "client.ts": {
+          originalPath: "client.ts",
+          outputFile: "client.js",
+          size: 100,
+          hash: "a".repeat(64),
+          type: "js",
+        },
+      },
+      assets: [{
+        outputFile: "chunk\\nested\\chunk.js",
+        size: 100,
+        hash: "a".repeat(64),
+        type: "js",
+        kind: "chunk",
+      }],
+    };
+
+    const manifestPath = resolve(TEST_DIR, "invalid-manifest.json");
+    await Deno.writeTextFile(manifestPath, JSON.stringify(invalidManifest));
+
+    await assertRejects(
+      async () => {
+        await readManifest(manifestPath);
+      },
+      ManifestError,
+      "must use forward slashes",
     );
   },
 });

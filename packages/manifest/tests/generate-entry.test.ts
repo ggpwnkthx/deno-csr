@@ -146,3 +146,21 @@ Deno.test({
     );
   },
 });
+
+Deno.test({
+  name: "generateManifestEntry throws ManifestError for UNC path in originalPath",
+  async fn() {
+    await cleanupTestDir();
+
+    const testFile = resolve(TEST_DIR, "test.js");
+    await Deno.writeTextFile(testFile, `console.log("hello");`);
+
+    await assertRejects(
+      async () => {
+        await generateManifestEntry("\\\\server\\share\\test.js", testFile, TEST_DIR);
+      },
+      ManifestError,
+      "must be relative to project root",
+    );
+  },
+});
