@@ -1,5 +1,5 @@
 {
-  "name": "base-deno",
+  "name": "deno-csr",
   "build": {
     "dockerfile": "Dockerfile"
   },

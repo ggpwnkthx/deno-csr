@@ -14,7 +14,7 @@ discussion for security-sensitive reports.
 
 ### Preferred Reporting Channel
 
-Send your report to: **security@example.com**
+Send your report to: **ibjessup+deno-csr@gmail.com**
 
 If this repository provides a private vulnerability reporting mechanism, use that
 channel instead.
