@@ -1,32 +1,12 @@
 import { assertEquals } from "@std/assert";
 import { resolve } from "@std/path";
 import { devClient } from "@ggpwnkthx/csr-dev";
-
-const TEST_DIR = await Deno.makeTempDir({ prefix: "csr-tooling-e2e-test-" });
-
-async function cleanupTestDir() {
-  try {
-    for await (const entry of Deno.readDir(TEST_DIR)) {
-      await Deno.remove(resolve(TEST_DIR, entry.name), { recursive: true });
-    }
-  } catch {
-    // ignore
-  }
-}
-
-async function createMinimalHTMLPage(outdir: string): Promise<string> {
-  await Deno.mkdir(outdir, { recursive: true });
-  const htmlPath = resolve(outdir, "index.html");
-  const htmlContent = `<!DOCTYPE html>
-<html>
-<head><title>Test</title></head>
-<body>
-<script type="module" src="/client.js"></script>
-</body>
-</html>`;
-  await Deno.writeTextFile(htmlPath, htmlContent);
-  return htmlPath;
-}
+import {
+  cleanupTestDir,
+  createMinimalHTMLPage,
+  TEST_DIR,
+  waitForFile,
+} from "./helpers.ts";
 
 Deno.test({
   name: "e2e: dev server serves built assets",
@@ -40,7 +20,7 @@ Deno.test({
     );
 
     const outdir = resolve(TEST_DIR, ".dev");
-    await createMinimalHTMLPage(outdir);
+    await createMinimalHTMLPage(outdir, "/client.js");
 
     const dev = await devClient({
       entryPoints: entryPath,
@@ -48,14 +28,16 @@ Deno.test({
       port: 19994,
     });
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      await waitForFile(outdir, (name) => name.endsWith(".js"));
 
-    const response = await fetch(`http://localhost:${dev.port}/index.html`);
-    assertEquals(response.ok, true);
-    const html = await response.text();
-    assertEquals(html.includes("index.html") || html.includes("Test"), true);
-
-    await dev.stop();
+      const response = await fetch(`http://localhost:${dev.port}/index.html`);
+      assertEquals(response.ok, true);
+      const html = await response.text();
+      assertEquals(html.includes("index.html") || html.includes("Test"), true);
+    } finally {
+      await dev.stop();
+    }
   },
 });
 
@@ -68,7 +50,7 @@ Deno.test({
     await Deno.writeTextFile(entryPath, `export const version = 1;`);
 
     const outdir = resolve(TEST_DIR, ".dev");
-    await createMinimalHTMLPage(outdir);
+    await createMinimalHTMLPage(outdir, "/client.js");
 
     const dev = await devClient({
       entryPoints: entryPath,
@@ -76,21 +58,53 @@ Deno.test({
       port: 19993,
     });
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      await waitForFile(outdir, (name) => name.endsWith(".js"));
 
-    const initialFiles = [];
-    for await (const entry of Deno.readDir(outdir)) {
-      if (entry.name.endsWith(".js")) {
-        initialFiles.push(entry.name);
+      const initialFiles: string[] = [];
+      for await (const entry of Deno.readDir(outdir)) {
+        if (entry.name.endsWith(".js")) {
+          initialFiles.push(entry.name);
+        }
       }
+      assertEquals(initialFiles.length > 0, true);
+
+      const firstFile = initialFiles[0];
+      const initialMtime = (await Deno.stat(resolve(outdir, firstFile))).mtime;
+
+      await Deno.writeTextFile(entryPath, `export const version = 2;`);
+
+      let detected = false;
+      const start = Date.now();
+      while (Date.now() - start < 5000) {
+        const afterFiles: string[] = [];
+        for await (const entry of Deno.readDir(outdir)) {
+          if (entry.name.endsWith(".js")) {
+            afterFiles.push(entry.name);
+          }
+        }
+        const newFiles = afterFiles.filter((f) => !initialFiles.includes(f));
+        if (newFiles.length > 0) {
+          const newFile = newFiles[0];
+          const afterContent = await Deno.readTextFile(resolve(outdir, newFile));
+          if (!afterContent.includes("version = 1")) {
+            assertEquals(afterContent.includes("version = 2"), true);
+            detected = true;
+            break;
+          }
+        }
+        const currentMtime = (await Deno.stat(resolve(outdir, firstFile))).mtime;
+        if (currentMtime && initialMtime && currentMtime > initialMtime) {
+          const afterContent = await Deno.readTextFile(resolve(outdir, firstFile));
+          assertEquals(afterContent.includes("version = 2"), true);
+          detected = true;
+          break;
+        }
+        await new Promise((r) => setTimeout(r, 100));
+      }
+      assertEquals(detected, true, "Rebuild not detected within timeout");
+    } finally {
+      await dev.stop();
     }
-
-    assertEquals(initialFiles.length > 0, true);
-
-    await Deno.writeTextFile(entryPath, `export const version = 2;`);
-
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    await dev.stop();
   },
 });

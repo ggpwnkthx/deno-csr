@@ -38,7 +38,7 @@ export class ValidationError extends Error {
  */
 export class EntryPointValidationError extends ValidationError {
   constructor(message: string, cause?: unknown) {
-    super(message, { cause });
+    super(message, cause);
     this.name = "EntryPointValidationError";
   }
 }
@@ -48,7 +48,7 @@ export class EntryPointValidationError extends ValidationError {
  */
 export class OutdirValidationError extends ValidationError {
   constructor(message: string, cause?: unknown) {
-    super(message, { cause });
+    super(message, cause);
     this.name = "OutdirValidationError";
   }
 }
@@ -58,7 +58,7 @@ export class OutdirValidationError extends ValidationError {
  */
 export class PortValidationError extends ValidationError {
   constructor(message: string, cause?: unknown) {
-    super(message, { cause });
+    super(message, cause);
     this.name = "PortValidationError";
   }
 }

@@ -4,6 +4,7 @@
   "version": "0.0.1-rc.0",
   "imports": {
     "@ggpwnkthx/csr": "../../src/mod.ts",
+    "@std/assert": "jsr:@std/assert@^1.0",
     "@std/path": "jsr:@std/path@^1.0",
     "@ggpwnkthx/esbuild": "jsr:@ggpwnkthx/esbuild@^0.1"
   },

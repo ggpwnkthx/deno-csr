@@ -141,6 +141,7 @@
       "packages/shared": {
         "dependencies": [
           "jsr:@ggpwnkthx/esbuild@0.1",
+          "jsr:@std/assert@1",
           "jsr:@std/path@1"
         ]
       }
