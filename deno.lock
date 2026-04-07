@@ -120,17 +120,17 @@
     "members": {
       "packages/build": {
         "dependencies": [
-          "jsr:@ggpwnkthx/csr-manifest@^0.0.1-rc",
-          "jsr:@ggpwnkthx/csr-shared@^0.0.1-rc",
+          "jsr:@ggpwnkthx/csr-manifest@0.0",
+          "jsr:@ggpwnkthx/csr-shared@0.0",
           "jsr:@ggpwnkthx/esbuild@0.1",
           "jsr:@std/path@1"
         ]
       },
       "packages/dev": {
         "dependencies": [
-          "jsr:@ggpwnkthx/csr-build@^0.0.1-rc",
-          "jsr:@ggpwnkthx/csr-manifest@^0.0.1-rc",
-          "jsr:@ggpwnkthx/csr-shared@^0.0.1-rc",
+          "jsr:@ggpwnkthx/csr-build@0.0",
+          "jsr:@ggpwnkthx/csr-manifest@0.0",
+          "jsr:@ggpwnkthx/csr-shared@0.0",
           "jsr:@ggpwnkthx/esbuild@0.1",
           "jsr:@std/media-types@1",
           "jsr:@std/path@1"
@@ -138,7 +138,7 @@
       },
       "packages/manifest": {
         "dependencies": [
-          "jsr:@ggpwnkthx/csr-shared@^0.0.1-rc",
+          "jsr:@ggpwnkthx/csr-shared@0.0",
           "jsr:@std/assert@1",
           "jsr:@std/path@^1.1.0"
         ]
