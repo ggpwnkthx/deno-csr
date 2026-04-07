@@ -7,7 +7,6 @@
     "jsr:@deno/graph@0.86": "0.86.9",
     "jsr:@deno/loader@~0.3.10": "0.3.14",
     "jsr:@ggpwnkthx/esbuild@0.1": "0.1.5",
-    "jsr:@ggpwnkthx/esbuild@0.1.5": "0.1.5",
     "jsr:@std/assert@1": "1.0.19",
     "jsr:@std/async@1": "1.2.0",
     "jsr:@std/bytes@^1.0.2": "1.0.6",
@@ -23,7 +22,7 @@
     "jsr:@std/path@1": "1.1.4",
     "jsr:@std/path@^1.0.8": "1.1.4",
     "jsr:@std/path@^1.1.0": "1.1.4",
-    "jsr:@zip-js/zip-js@^2.7.52": "2.8.24"
+    "jsr:@zip-js/zip-js@^2.7.52": "2.8.26"
   },
   "jsr": {
     "@astral/astral@0.5.6": {
@@ -107,8 +106,8 @@
         "jsr:@std/internal"
       ]
     },
-    "@zip-js/zip-js@2.8.24": {
-      "integrity": "3e5744893e2b08f82ec3706ffad05398ee03ab2628457d805e449efda354994b"
+    "@zip-js/zip-js@2.8.26": {
+      "integrity": "2b78bfa2c5d43766c9a487fc0274981d45732de41bb5b82433d29d235be67191"
     }
   },
   "workspace": {
@@ -121,19 +120,23 @@
     "members": {
       "packages/build": {
         "dependencies": [
-          "jsr:@ggpwnkthx/esbuild@0.1.5",
+          "jsr:@ggpwnkthx/csr-manifest@^0.0.1-rc",
+          "jsr:@ggpwnkthx/csr-shared@^0.0.1-rc",
+          "jsr:@ggpwnkthx/esbuild@0.1",
           "jsr:@std/path@1"
         ]
       },
       "packages/dev": {
         "dependencies": [
-          "jsr:@ggpwnkthx/esbuild@0.1.5",
+          "jsr:@ggpwnkthx/csr-shared@^0.0.1-rc",
+          "jsr:@ggpwnkthx/esbuild@0.1",
           "jsr:@std/media-types@1",
           "jsr:@std/path@1"
         ]
       },
       "packages/manifest": {
         "dependencies": [
+          "jsr:@ggpwnkthx/csr-shared@^0.0.1-rc",
           "jsr:@std/assert@1",
           "jsr:@std/path@^1.1.0"
         ]

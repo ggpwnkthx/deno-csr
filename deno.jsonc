@@ -2,14 +2,12 @@
   "name": "@ggpwnkthx/csr",
   "description": "A tooling package that wraps `@ggpwnkthx/esbuild` and provides the build/dev workflow that applications use during development and production asset generation.",
   "version": "0.0.1-rc.0",
-  "workspace": {
-    "members": [
-      "packages/shared",
-      "packages/manifest",
-      "packages/build",
-      "packages/dev"
-    ]
-  },
+  "workspace": [
+    "./packages/shared",
+    "./packages/manifest",
+    "./packages/build",
+    "./packages/dev"
+  ],
   "imports": {
     "@astral/astral": "jsr:@astral/astral@^0.5",
     "@ggpwnkthx/esbuild": "jsr:@ggpwnkthx/esbuild@^0.1",
@@ -28,12 +26,17 @@
   },
   "lint": {
     "rules": {
-      "tags": ["recommended"]
+      "tags": [
+        "recommended"
+      ]
     }
   },
   "compilerOptions": {
     "strict": true,
-    "lib": ["deno.ns", "dom"]
+    "lib": [
+      "deno.ns",
+      "dom"
+    ]
   },
   "exports": {
     ".": "./src/mod.ts"
@@ -52,5 +55,8 @@
     "path": "./deno.lock",
     "frozen": false
   },
-  "exclude": [".*", "coverage"]
+  "exclude": [
+    ".*",
+    "coverage"
+  ]
 }

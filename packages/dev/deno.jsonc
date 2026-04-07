@@ -3,9 +3,8 @@
   "description": "Development server with live reload for CSR tooling.",
   "version": "0.0.1-rc.0",
   "imports": {
-    "@ggpwnkthx/csr": "../../src/mod.ts",
-    "@ggpwnkthx/esbuild": "jsr:@ggpwnkthx/esbuild@0.1.5",
-    "@ggpwnkthx/csr-shared": "../shared/src/mod.ts",
+    "@ggpwnkthx/esbuild": "jsr:@ggpwnkthx/esbuild@^0.1",
+    "@ggpwnkthx/csr-shared": "jsr:@ggpwnkthx/csr-shared@^0.0.1-rc",
     "@std/media-types": "jsr:@std/media-types@^1.0",
     "@std/path": "jsr:@std/path@^1.0"
   },
