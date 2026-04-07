@@ -34,6 +34,32 @@ Deno.test({
     assertEquals(typeof dev.port, "number");
     assertEquals(dev.port > 0, true);
     assertEquals(typeof dev.stop, "function");
+    assertEquals(dev.manifestPath !== null, true);
+    assertEquals(dev.manifestPath!.endsWith("manifest.json"), true);
+
+    await dev.stop();
+  },
+});
+
+Deno.test({
+  name: "devClient with manifest: false returns null manifestPath",
+  async fn() {
+    await cleanupTestDir();
+
+    const entryPath = resolve(TEST_DIR, "client.ts");
+    await Deno.writeTextFile(
+      entryPath,
+      `export const greeting = "hello world";`,
+    );
+
+    const dev = await devClient({
+      entryPoints: entryPath,
+      outdir: resolve(TEST_DIR, ".dev"),
+      port: 19999,
+      manifest: false,
+    });
+
+    assertEquals(dev.manifestPath, null);
 
     await dev.stop();
   },

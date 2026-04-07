@@ -49,8 +49,10 @@ export interface ValidatedBuildOptions {
 export interface ValidatedDevOptions {
   entryPoints: string[];
   outdir: string;
+  rootDir: string;
   port: number;
   esbuildOptions: Record<string, unknown>;
+  manifest: boolean;
 }
 
 function isFile(path: string): boolean {
@@ -176,7 +178,9 @@ export function validateDevOptions(
   return {
     entryPoints: validateEntryPoints(options.entryPoints),
     outdir: validateOutdir(options.outdir, ".dev"),
+    rootDir: validateRootDir(options.rootDir),
     port: validatePort(options.port),
     esbuildOptions: sanitizeEsbuildOptions(options.esbuildOptions),
+    manifest: options.manifest ?? true,
   };
 }

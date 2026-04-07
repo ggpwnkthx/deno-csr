@@ -7,33 +7,33 @@
  * - Deterministic manifest generation for server/runtime consumption
  *
  * @module
- *
- * @example Basic usage
- * ```typescript
- * import { buildClient, devClient, readManifest } from "@ggpwnkthx/csr";
- *
- * // Production build
- * const result = await buildClient({
- *   entryPoints: ["src/client.ts"],
- *   outdir: "dist",
- * });
- * console.log("Built:", result.outputFiles);
- *
- * // Development server
- * const dev = await devClient({
- *   entryPoints: ["src/client.ts"],
- *   outdir: ".dev",
- *   port: 35729,
- * });
- * console.log(`Dev server running on ${dev.hostname}:${dev.port}`);
- * await dev.stop();
- *
- * // Read manifest for SSR
- * const manifest = await readManifest("dist/manifest.json");
- * ```
  */
 
-export * from "@ggpwnkthx/csr-build";
-export * from "@ggpwnkthx/csr-dev";
-export * from "@ggpwnkthx/csr-manifest";
-export * from "@ggpwnkthx/csr-shared";
+export {
+  buildClient,
+  generateBuildManifest,
+  processMetafileOutputs,
+} from "@ggpwnkthx/csr-build";
+export type {
+  BuildClientOptions,
+  BuildResult,
+  MetafileOutputEntry,
+} from "@ggpwnkthx/csr-build";
+export {
+  esbuildModule,
+  resetEsbuildModule,
+  setEsbuildModule,
+} from "@ggpwnkthx/csr-build";
+
+export { devClient } from "@ggpwnkthx/csr-dev";
+export type { DevClientOptions, DevResult } from "@ggpwnkthx/csr-dev";
+
+export { readManifest, writeManifest } from "@ggpwnkthx/csr-manifest";
+export type {
+  AssetManifest,
+  ManifestEntry,
+  UnkeyedOutputEntry,
+} from "@ggpwnkthx/csr-manifest";
+
+export { BuildError, DevServerError, ValidationError } from "@ggpwnkthx/csr-shared";
+export { FileTooLargeError } from "@ggpwnkthx/csr-dev";

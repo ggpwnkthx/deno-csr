@@ -21,6 +21,8 @@ export interface BuildClientOptions {
 export interface DevClientOptions {
   entryPoints: string | string[];
   outdir?: string;
+  rootDir?: string;
   port: number;
   esbuildOptions?: Record<string, unknown>;
+  manifest?: boolean;
 }

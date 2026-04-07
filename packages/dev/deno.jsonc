@@ -4,6 +4,8 @@
   "version": "0.0.1-rc.0",
   "imports": {
     "@ggpwnkthx/esbuild": "jsr:@ggpwnkthx/esbuild@^0.1",
+    "@ggpwnkthx/csr-build": "jsr:@ggpwnkthx/csr-build@^0.0.1-rc",
+    "@ggpwnkthx/csr-manifest": "jsr:@ggpwnkthx/csr-manifest@^0.0.1-rc",
     "@ggpwnkthx/csr-shared": "jsr:@ggpwnkthx/csr-shared@^0.0.1-rc",
     "@std/media-types": "jsr:@std/media-types@^1.0",
     "@std/path": "jsr:@std/path@^1.0"

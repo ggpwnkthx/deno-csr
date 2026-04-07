@@ -7,6 +7,7 @@
  *
  * - `GET /@entry/<entry>` - redirects to the current JS for that entry
  * - `GET /@style/<entry>` - redirects to the current CSS for that entry (if any)
+ * - `GET /@manifest` - serves the manifest JSON (when manifest generation is enabled)
  *
  * The HTML live reload script is injected at request time for HTML responses.
  * If the HTML contains `</body>`, the script is injected before it; otherwise
@@ -25,10 +26,12 @@
  *   entryPoints: ["src/client.ts"],
  *   outdir: ".dev",
  *   port: 35729,
+ *   manifest: true,
  * });
  *
- * console.log(`Dev server running on http://${dev.hostname}:${dev.port}`);
+ * console.log(`Dev server running on http://localhost:${dev.port}`);
  * console.log(`Output directory: ${dev.outdir}`);
+ * console.log(`Manifest: ${dev.manifestPath}`);
  *
  * await dev.stop();
  * ```
@@ -40,4 +43,4 @@ export { FileTooLargeError } from "./errors.ts";
 
 export { devClient } from "./client.ts";
 export { safeFilePath } from "./path-utils.ts";
-export type { DevClientOptions, DevHandle } from "./types.ts";
+export type { DevClientOptions, DevResult } from "./types.ts";

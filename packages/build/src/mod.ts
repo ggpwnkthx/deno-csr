@@ -30,4 +30,7 @@
 
 export { buildClient } from "./client.ts";
 export { esbuildModule, resetEsbuildModule, setEsbuildModule } from "./esbuild.ts";
+export { generateBuildManifest } from "./manifest.ts";
+export { processMetafileOutputs } from "./metafile.ts";
 export type { BuildClientOptions, BuildDiagnostic, BuildResult } from "./types.ts";
+export type { MetafileOutputEntry } from "./metafile.ts";

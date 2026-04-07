@@ -47,6 +47,8 @@ Deno.test({
           waitUntil: "networkidle2",
         });
 
+        await new Promise((r) => setTimeout(r, 1000));
+
         const initialText = await page.evaluate(() => document.body.textContent);
         assertEquals(initialText, "hello v1");
 

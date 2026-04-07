@@ -30,6 +30,12 @@ export { ASSET_TYPES, detectAssetType } from "./detect-type.ts";
 export type { AssetType } from "./detect-type.ts";
 
 export {
+  isMetafileOutputEntry,
+  type MetafileOutputEntry,
+  processMetafileOutputs,
+} from "./metafile-process.ts";
+
+export {
   validateBuildOptions,
   type ValidatedBuildOptions,
   type ValidatedDevOptions,

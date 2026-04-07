@@ -6,11 +6,11 @@
 export type { DevClientOptions } from "@ggpwnkthx/csr-shared";
 
 /**
- * Handle to the running dev server.
+ * Result of starting the dev server.
  */
-export interface DevHandle {
-  hostname: string;
+export interface DevResult {
   port: number;
   outdir: string;
+  manifestPath: string | null;
   stop: () => Promise<void>;
 }

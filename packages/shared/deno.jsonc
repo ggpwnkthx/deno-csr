@@ -5,6 +5,7 @@
   "imports": {
     "@std/assert": "jsr:@std/assert@^1.0",
     "@std/path": "jsr:@std/path@^1.0",
+    "@ggpwnkthx/csr-manifest": "jsr:@ggpwnkthx/csr-manifest@^0.0.1-rc",
     "@ggpwnkthx/esbuild": "jsr:@ggpwnkthx/esbuild@^0.1"
   },
   "fmt": {
