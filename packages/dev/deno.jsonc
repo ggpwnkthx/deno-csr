@@ -1,7 +1,7 @@
 {
   "name": "@ggpwnkthx/csr-dev",
   "description": "Development server with live reload for CSR tooling.",
-  "version": "0.0.1-rc.1",
+  "version": "0.0.1",
   "imports": {
     "@ggpwnkthx/esbuild": "jsr:@ggpwnkthx/esbuild@^0.1",
     "@ggpwnkthx/csr-build": "jsr:@ggpwnkthx/csr-build@^0.0.1-rc",
