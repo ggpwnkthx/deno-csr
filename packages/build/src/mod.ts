@@ -9,6 +9,23 @@
  * - `chunkNames: "[dir]/[name].[hash]"` - Hashed filenames for chunks
  *
  * @module
+ *
+ * @example
+ * ```typescript
+ * import { buildClient, BuildError } from "@ggpwnkthx/csr-build";
+ *
+ * try {
+ *   const result = await buildClient({
+ *     entryPoints: ["src/client.ts"],
+ *     outdir: "dist",
+ *   });
+ *   console.log("Output files:", result.outputFiles);
+ * } catch (err) {
+ *   if (err instanceof BuildError) {
+ *     console.error("Build failed:", err.diagnostics);
+ *   }
+ * }
+ * ```
  */
 
 export { buildClient } from "./client.ts";

@@ -8,6 +8,31 @@
  * - Test harnesses that validate generated asset maps
  *
  * @module
+ *
+ * @example Reading a manifest
+ * ```typescript
+ * import { readManifest } from "@ggpwnkthx/csr-manifest";
+ *
+ * const manifest = await readManifest("dist/manifest.json");
+ *
+ * for (const [entryName, entry] of Object.entries(manifest.entries)) {
+ *   console.log(`${entryName} -> ${entry.outputFile} (${entry.hash})`);
+ * }
+ * ```
+ *
+ * @example Building a manifest
+ * ```typescript
+ * import { buildManifest, generateManifestEntry, writeManifest } from "@ggpwnkthx/csr-manifest";
+ *
+ * const entry = await generateManifestEntry(
+ *   "src/client.ts",
+ *   "/path/to/dist/client.abc123.js",
+ *   "/path/to/dist",
+ * );
+ *
+ * const manifest = buildManifest({ "src/client.ts": entry });
+ * const manifestPath = await writeManifest(manifest, "/path/to/dist");
+ * ```
  */
 
 export * from "./types.ts";
