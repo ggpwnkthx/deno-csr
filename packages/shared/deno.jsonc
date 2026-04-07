@@ -1,7 +1,7 @@
 {
   "name": "@ggpwnkthx/csr-shared",
   "description": "Shared utilities for CSR tooling packages.",
-  "version": "0.0.1-rc.0",
+  "version": "0.0.1-rc.1",
   "imports": {
     "@std/assert": "jsr:@std/assert@^1.0",
     "@std/path": "jsr:@std/path@^1.0",
