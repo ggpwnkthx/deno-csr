@@ -38,5 +38,6 @@
 export * from "./types.ts";
 export * from "./generate.ts";
 export * from "./build.ts";
+export * from "./metafile-process.ts";
 export * from "./validate.ts";
 export * from "./io.ts";

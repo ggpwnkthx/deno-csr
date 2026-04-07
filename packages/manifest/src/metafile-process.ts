@@ -1,61 +1,28 @@
 /**
- * Shared esbuild metafile processing utilities.
+ * Esbuild metafile processing utilities.
  *
- * Both `csr-build` and `csr-dev` process esbuild metafile outputs into
- * typed manifest entries. This module provides the shared implementation.
+ * Processes esbuild metafile outputs into typed manifest entries
+ * for use by build and dev packages.
  * @module
  */
 
-import { basename, extname, relative, resolve } from "@std/path";
-import { type ManifestEntry, type UnkeyedOutputEntry } from "@ggpwnkthx/csr-manifest";
-import { detectAssetType, hashFile, normalizePath } from "@ggpwnkthx/csr-shared";
-
-const VALID_ENTRY_EXTS = [".js", ".mjs", ".ts", ".tsx", ".jsx"] as const;
-
-/**
- * An entry in the esbuild metafile outputs.
- */
-export interface MetafileOutputEntry {
-  entryPoint?: string;
-  cssBundle?: string;
-  bytes: number;
-  inputs?: Record<string, { bytesInOutput: number }>;
-  kind?: "chunk" | "asset";
-}
-
-/**
- * Type guard for MetafileOutputEntry.
- */
-export function isMetafileOutputEntry(
-  value: unknown,
-): value is MetafileOutputEntry {
-  if (typeof value !== "object" || value === null) return false;
-  const entry = value as Record<string, unknown>;
-  if (typeof entry.bytes !== "number") return false;
-  if (
-    entry.entryPoint !== undefined
-    && typeof entry.entryPoint !== "string"
-  ) {
-    return false;
-  }
-  if (entry.inputs !== undefined) {
-    if (typeof entry.inputs !== "object") return false;
-  }
-  if (
-    entry.kind !== undefined
-    && !["chunk", "asset"].includes(entry.kind as string)
-  ) {
-    return false;
-  }
-  return true;
-}
-
-interface MetafileOutput {
-  [key: string]: MetafileOutputEntry | undefined;
-}
+import { relative, resolve } from "@std/path";
+import {
+  isMetafileOutputEntry,
+  type ManifestEntry,
+  ManifestError,
+  type MetafileOutputEntry,
+  type UnkeyedOutputEntry,
+} from "./types.ts";
+import {
+  detectAssetType,
+  hashFile,
+  isPathTraversalSafe,
+  normalizePath,
+} from "@ggpwnkthx/csr-shared";
 
 interface ProcessMetafileOptions {
-  metafile: MetafileOutput;
+  metafile: Record<string, MetafileOutputEntry | undefined>;
   outdir: string;
   rootDir: string;
 }
@@ -94,7 +61,7 @@ async function processSingleOutput(
   if (metaOutput.entryPoint) {
     const absSource = metaOutput.entryPoint;
     const relSource = normalizePath(relative(rootDir, absSource));
-    if (!relSource.startsWith("..") && !relSource.startsWith("/")) {
+    if (isPathTraversalSafe(relSource)) {
       sourcePath = relSource;
     }
   } else if (
@@ -103,7 +70,7 @@ async function processSingleOutput(
   ) {
     const absSource = Object.keys(metaOutput.inputs)[0];
     const relSource = normalizePath(relative(rootDir, absSource));
-    if (!relSource.startsWith("..") && !relSource.startsWith("/")) {
+    if (isPathTraversalSafe(relSource)) {
       sourcePath = relSource;
     }
   }
@@ -115,7 +82,7 @@ async function processSingleOutput(
     hash,
     outputType,
     sourcePath,
-    kind: metaOutput.kind === "chunk" ? "chunk" : "asset",
+    kind: (metaOutput.kind === "chunk" ? "chunk" : "asset") as "chunk" | "asset",
   };
 }
 
@@ -129,6 +96,13 @@ export async function processMetafileOutputs(
   options: ProcessMetafileOptions,
 ): Promise<ProcessedMetafileResult> {
   const { metafile, outdir, rootDir } = options;
+
+  if (!outdir) {
+    throw new ManifestError("outdir must be a non-empty string");
+  }
+  if (!rootDir) {
+    throw new ManifestError("rootDir must be a non-empty string");
+  }
 
   const filteredEntries: Array<
     { outputPath: string; metaOutput: MetafileOutputEntry }
@@ -173,17 +147,4 @@ export async function processMetafileOutputs(
   }
 
   return { keyedEntries, unkeyedAssets };
-}
-
-/**
- * Looks up an entry name from a metafile entryPoint value.
- */
-export function entryNameFromMetafileEntry(entryPoint: string): string | null {
-  const ext = extname(entryPoint);
-  if (!VALID_ENTRY_EXTS.includes(ext as typeof VALID_ENTRY_EXTS[number])) {
-    return null;
-  }
-  const name = basename(entryPoint, ext);
-  if (!name) return null;
-  return name;
 }

@@ -33,6 +33,49 @@ export interface UnkeyedOutputEntry {
 }
 
 /**
+ * An entry in the esbuild metafile outputs.
+ */
+export interface MetafileOutputEntry {
+  entryPoint?: string;
+  cssBundle?: string;
+  bytes: number;
+  inputs?: Record<string, { bytesInOutput: number }>;
+  kind?: "chunk" | "asset";
+}
+
+/**
+ * Type guard for MetafileOutputEntry.
+ */
+export function isMetafileOutputEntry(
+  value: unknown,
+): value is MetafileOutputEntry {
+  if (typeof value !== "object" || value === null) return false;
+  const entry = value as Record<string, unknown>;
+  if (typeof entry.bytes !== "number") return false;
+  if (
+    entry.entryPoint !== undefined
+    && typeof entry.entryPoint !== "string"
+  ) {
+    return false;
+  }
+  if (entry.inputs !== undefined) {
+    if (typeof entry.inputs !== "object") return false;
+    for (const [, val] of Object.entries(entry.inputs as Record<string, unknown>)) {
+      if (typeof val !== "object" || val === null) return false;
+      const inputEntry = val as Record<string, unknown>;
+      if (typeof inputEntry.bytesInOutput !== "number") return false;
+    }
+  }
+  if (
+    entry.kind !== undefined
+    && !["chunk", "asset"].includes(entry.kind as string)
+  ) {
+    return false;
+  }
+  return true;
+}
+
+/**
  * Complete asset manifest structure.
  */
 export interface AssetManifest {

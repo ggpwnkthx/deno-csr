@@ -1,6 +1,7 @@
 import { basename, extname, resolve } from "@std/path";
 import { context, stop } from "@ggpwnkthx/esbuild";
 import { type MetafileOutputEntry, processMetafileOutputs } from "@ggpwnkthx/csr-build";
+import { isMetafileOutputEntry } from "@ggpwnkthx/csr-manifest";
 import { validateDevOptions } from "@ggpwnkthx/csr-shared";
 import { DevServerError } from "@ggpwnkthx/csr-shared";
 import { FileTooLargeError } from "./errors.ts";
@@ -29,7 +30,8 @@ function buildEntryNameIndexFromMetafile(
   for (const [outputPath, info] of Object.entries(metafile)) {
     if (outputPath.endsWith(".map")) continue;
     if (!info) continue;
-    const entryPoint = info["entryPoint"];
+    if (!isMetafileOutputEntry(info)) continue;
+    const entryPoint = info.entryPoint;
     if (typeof entryPoint !== "string") continue;
     const ext = extname(entryPoint);
     if (!VALID_ENTRY_EXTS.includes(ext as typeof VALID_ENTRY_EXTS[number])) {
@@ -38,7 +40,7 @@ function buildEntryNameIndexFromMetafile(
     const name = basename(entryPoint, ext);
     if (!name) continue;
     const jsFile = basename(outputPath);
-    const cssBundle = info["cssBundle"];
+    const cssBundle = info.cssBundle;
     index[name] = {
       js: jsFile,
       css: typeof cssBundle === "string" ? basename(cssBundle) : undefined,

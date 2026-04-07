@@ -145,7 +145,6 @@
       },
       "packages/shared": {
         "dependencies": [
-          "jsr:@ggpwnkthx/csr-manifest@^0.0.1-rc",
           "jsr:@ggpwnkthx/esbuild@0.1",
           "jsr:@std/assert@1",
           "jsr:@std/path@1"
