@@ -62,3 +62,13 @@ export class PortValidationError extends ValidationError {
     this.name = "PortValidationError";
   }
 }
+
+/**
+ * Error thrown when hostname validation fails.
+ */
+export class HostnameValidationError extends ValidationError {
+  constructor(message: string, cause?: unknown) {
+    super(message, cause);
+    this.name = "HostnameValidationError";
+  }
+}

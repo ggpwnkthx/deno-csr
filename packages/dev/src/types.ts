@@ -10,6 +10,7 @@ export type { DevClientOptions } from "@ggpwnkthx/csr-shared";
  */
 export interface DevResult {
   port: number;
+  hostname: string;
   outdir: string;
   manifestPath: string | null;
   stop: () => Promise<void>;

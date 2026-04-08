@@ -150,8 +150,14 @@ async function rebuildAndProcess(
 
 export async function devClient(options: DevClientOptions): Promise<DevResult> {
   const validated = validateDevOptions(options);
-  const { entryPoints, outdir, port, esbuildOptions, manifest: generateManifest } =
-    validated;
+  const {
+    entryPoints,
+    outdir,
+    port,
+    hostname,
+    esbuildOptions,
+    manifest: generateManifest,
+  } = validated;
 
   let httpServer: Deno.HttpServer | null = null;
   let ctx: Awaited<ReturnType<typeof context>> | null = null;
@@ -184,7 +190,7 @@ export async function devClient(options: DevClientOptions): Promise<DevResult> {
     const serverPort = port;
 
     httpServer = Deno.serve(
-      { port: serverPort, hostname: "localhost" },
+      { port: serverPort, hostname },
       async (request) => {
         const url = new URL(request.url);
 
@@ -448,11 +454,12 @@ export async function devClient(options: DevClientOptions): Promise<DevResult> {
       `[csr-dev] Watching source directories: ${sourceDirs.join(", ")}`,
     );
     console.log(
-      `[csr-dev] Dev server running on http://localhost:${serverPort}`,
+      `[csr-dev] Dev server running on http://${hostname}:${serverPort}`,
     );
 
     return {
       port: serverPort,
+      hostname,
       outdir: resolve(outdir),
       manifestPath,
       stop: async () => {

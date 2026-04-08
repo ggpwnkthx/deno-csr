@@ -108,3 +108,35 @@ Deno.test({
     }
   },
 });
+
+Deno.test({
+  name: "e2e: dev server binds to custom hostname",
+  async fn() {
+    await cleanupTestDir();
+
+    const entryPath = resolve(TEST_DIR, "client.ts");
+    await Deno.writeTextFile(
+      entryPath,
+      `export const greeting = "hello from dev";`,
+    );
+
+    const outdir = resolve(TEST_DIR, ".dev");
+    await createMinimalHTMLPage(outdir, "/client.js");
+
+    const dev = await devClient({
+      entryPoints: entryPath,
+      outdir,
+      port: 19995,
+      hostname: "127.0.0.1",
+    });
+
+    try {
+      assertEquals(dev.hostname, "127.0.0.1");
+      const response = await fetch(`http://127.0.0.1:${dev.port}/index.html`);
+      assertEquals(response.ok, true);
+      await response.text();
+    } finally {
+      await dev.stop();
+    }
+  },
+});

@@ -46,6 +46,7 @@ export {
   BuildError,
   DevServerError,
   EntryPointValidationError,
+  HostnameValidationError,
   OutdirValidationError,
   PortValidationError,
   ValidationError,

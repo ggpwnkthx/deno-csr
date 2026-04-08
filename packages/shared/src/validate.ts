@@ -7,6 +7,7 @@ import { resolve } from "@std/path";
 import type { BuildClientOptions, DevClientOptions } from "./options.ts";
 import {
   EntryPointValidationError,
+  HostnameValidationError,
   OutdirValidationError,
   PortValidationError,
   ValidationError,
@@ -51,6 +52,7 @@ export interface ValidatedDevOptions {
   outdir: string;
   rootDir: string;
   port: number;
+  hostname: string;
   esbuildOptions: Record<string, unknown>;
   manifest: boolean;
 }
@@ -120,6 +122,18 @@ function validatePort(port: number): number {
   return port;
 }
 
+function validateHostname(hostname: string | undefined): string {
+  if (hostname === undefined) {
+    return "0.0.0.0";
+  }
+  if (hostname.trim() === "") {
+    throw new HostnameValidationError(
+      "hostname cannot be empty or whitespace.",
+    );
+  }
+  return hostname;
+}
+
 function sanitizeEsbuildOptions(
   esbuildOptions: Record<string, unknown> | undefined,
 ): Record<string, unknown> {
@@ -180,6 +194,7 @@ export function validateDevOptions(
     outdir: validateOutdir(options.outdir, ".dev"),
     rootDir: validateRootDir(options.rootDir),
     port: validatePort(options.port),
+    hostname: validateHostname(options.hostname),
     esbuildOptions: sanitizeEsbuildOptions(options.esbuildOptions),
     manifest: options.manifest ?? true,
   };

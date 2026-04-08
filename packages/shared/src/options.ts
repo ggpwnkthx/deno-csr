@@ -23,6 +23,7 @@ export interface DevClientOptions {
   outdir?: string;
   rootDir?: string;
   port: number;
+  hostname?: string;
   esbuildOptions?: Record<string, unknown>;
   manifest?: boolean;
 }

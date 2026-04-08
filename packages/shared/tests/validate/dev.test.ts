@@ -2,6 +2,7 @@ import { assertEquals, assertThrows } from "@std/assert";
 import type { DevClientOptions } from "@ggpwnkthx/csr";
 import {
   EntryPointValidationError,
+  HostnameValidationError,
   PortValidationError,
   ValidationError,
 } from "@ggpwnkthx/csr-shared";
@@ -114,6 +115,49 @@ Deno.test({
         }),
       PortValidationError,
       "Port must be an integer",
+    );
+  },
+});
+
+Deno.test({
+  name: "validateDevOptions defaults hostname to 0.0.0.0",
+  fn() {
+    Deno.writeFileSync(VALID_ENTRY, new Uint8Array());
+    const result = validateDevOptions({
+      entryPoints: VALID_ENTRY,
+      port: 8080,
+    });
+    assertEquals(result.hostname, "0.0.0.0");
+  },
+});
+
+Deno.test({
+  name: "validateDevOptions accepts custom hostname",
+  fn() {
+    Deno.writeFileSync(VALID_ENTRY, new Uint8Array());
+    const result = validateDevOptions({
+      entryPoints: VALID_ENTRY,
+      port: 8080,
+      hostname: "127.0.0.1",
+    });
+    assertEquals(result.hostname, "127.0.0.1");
+  },
+});
+
+Deno.test({
+  name:
+    "validateDevOptions throws HostnameValidationError for whitespace-only hostname",
+  fn() {
+    Deno.writeFileSync(VALID_ENTRY, new Uint8Array());
+    assertThrows(
+      () =>
+        validateDevOptions({
+          entryPoints: VALID_ENTRY,
+          port: 8080,
+          hostname: "   ",
+        }),
+      HostnameValidationError,
+      "hostname cannot be empty or whitespace.",
     );
   },
 });
