@@ -25,7 +25,7 @@ export {
   setEsbuildModule,
 } from "@ggpwnkthx/csr-build";
 
-export { devClient } from "@ggpwnkthx/csr-dev";
+export { devClient, safeFilePath } from "@ggpwnkthx/csr-dev";
 export type { DevClientOptions, DevResult } from "@ggpwnkthx/csr-dev";
 
 export { readManifest, writeManifest } from "@ggpwnkthx/csr-manifest";
