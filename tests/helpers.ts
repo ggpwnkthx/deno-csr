@@ -112,7 +112,7 @@ export function createStaticFileServer(
   port: number,
 ): ServerHandle {
   const server = Deno.serve(
-    { port, hostname: "localhost" },
+    { port, hostname: "0.0.0.0" },
     (request) => {
       const url = new URL(request.url);
       const path = url.pathname === "/" ? "/index.html" : url.pathname;

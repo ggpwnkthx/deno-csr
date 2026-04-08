@@ -1,7 +1,7 @@
 {
   "name": "@ggpwnkthx/csr",
   "description": "A tooling package that wraps `@ggpwnkthx/esbuild` and provides the build/dev workflow that applications use during development and production asset generation.",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "workspace": [
     "./packages/shared",
     "./packages/manifest",

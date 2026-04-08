@@ -1,7 +1,7 @@
 {
   "name": "@ggpwnkthx/csr-build",
   "description": "Production client build orchestration for CSR tooling.",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "imports": {
     "@ggpwnkthx/esbuild": "jsr:@ggpwnkthx/esbuild@^0.1",
     "@ggpwnkthx/csr-manifest": "jsr:@ggpwnkthx/csr-manifest@^0.0",
