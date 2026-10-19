@@ -11,7 +11,7 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Publish package
         run: npx jsr publish
         working-directory: packages/shared
@@ -23,7 +23,7 @@ jobs:
       id-token: write
     needs: publish-shared
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Publish package
         run: npx jsr publish
         working-directory: packages/manifest
@@ -35,7 +35,7 @@ jobs:
       id-token: write
     needs: publish-manifest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Publish package
         run: npx jsr publish
         working-directory: packages/build
@@ -47,7 +47,7 @@ jobs:
       id-token: write
     needs: publish-build
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Publish package
         run: npx jsr publish
         working-directory: packages/dev
@@ -59,7 +59,7 @@ jobs:
       id-token: write
     needs: publish-dev
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Publish package
         run: npx jsr publish
         working-directory: .
