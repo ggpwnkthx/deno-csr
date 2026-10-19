@@ -11,7 +11,7 @@
   "imports": {
     "@astral/astral": "jsr:@astral/astral@^0.5",
     "@ggpwnkthx/esbuild": "jsr:@ggpwnkthx/esbuild@^0.1",
-    "@std/assert": "jsr:@std/assert@^1.0",
+    "@std/assert": "jsr:@std/assert@^1.0.19",
     "@std/path": "jsr:@std/path@^1.1"
   },
   "fmt": {
