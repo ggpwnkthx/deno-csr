@@ -8,7 +8,7 @@
     "@ggpwnkthx/csr-manifest": "jsr:@ggpwnkthx/csr-manifest@^0.0",
     "@ggpwnkthx/csr-shared": "jsr:@ggpwnkthx/csr-shared@^0.0",
     "@std/media-types": "jsr:@std/media-types@^1.0",
-    "@std/path": "jsr:@std/path@^1.0"
+    "@std/path": "jsr:@std/path@^1.1.6"
   },
   "fmt": {
     "lineWidth": 88,
