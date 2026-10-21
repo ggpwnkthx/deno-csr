@@ -3,7 +3,7 @@
   "description": "Production client build orchestration for CSR tooling.",
   "version": "0.0.6",
   "imports": {
-    "@ggpwnkthx/esbuild": "jsr:@ggpwnkthx/esbuild@^0.1",
+    "@ggpwnkthx/esbuild": "jsr:@ggpwnkthx/esbuild@^0.2.16",
     "@ggpwnkthx/csr-manifest": "jsr:@ggpwnkthx/csr-manifest@^0.0",
     "@ggpwnkthx/csr-shared": "jsr:@ggpwnkthx/csr-shared@^0.0",
     "@std/path": "jsr:@std/path@^1.0"
